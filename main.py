@@ -9,17 +9,89 @@ def next_turn(row, column):
     if buttons[row][column]['text']=="" and check_winner() is False:
         if player == players[0]:
             buttons[row][column]['text'] = player
-            if check_winner is False:
+            if check_winner() is False:
                 player = players[1]
                 label.config(text = (players[1] + " turn"))
+                
+            elif check_winner() is True:
+                label.config(text=(players[0] + " wins"))
+                
+            elif check_winner() == "Tie":
+                label.config(text=("TIE"))
+                
+        else:
+            buttons[row][column]['text'] = player
+            if check_winner() is False:
+                player = players[0]
+                label.config(text = (players[0] + " turn"))
+                
+            elif check_winner() is True:
+                label.config(text=(players[1] + " wins"))
+                
+            elif check_winner() == "Tie":
+                label.config(text=("TIE"))     
+        
+           
 def check_winner():
-    pass
+    for row in range(3):
+        if buttons[row][0]['text'] == buttons[row][1]['text'] == buttons[row][2]['text'] != " ":
+            buttons[row][0].config(bg="lime")
+            buttons[row][1].config(bg="lime")
+            buttons[row][2].config(bg="lime")
+            return True
+        
+    for column in range(3):
+        if buttons[column][0]['text'] == buttons[column][1]['text'] == buttons[column][2]['text'] != " ":
+            buttons[0][column].config(bg="lime")
+            buttons[1][column].config(bg="lime")
+            buttons[2][column].config(bg="lime")
+            return True
+        
+    if buttons[0][0]['text'] == buttons[1][1]['text'] == buttons[2][2]['text'] != " ":
+        buttons[0][0].config(bg="lime")
+        buttons[1][1].config(bg="lime")
+        buttons[2][2].config(bg="lime")
+        return True
+    
+    elif buttons[0][2]['text'] == buttons[1][1]['text'] == buttons[2][0]['text'] != " ":
+        buttons[0][2].config(bg="lime")
+        buttons[1][1].config(bg="lime")
+        buttons[2][0].config(bg="lime")
+        return True
+    
+    elif empty_spaces() is False:
+        for row in range(3):
+            for column in range(3):
+               buttons[row][column].config(bg="yellow") 
+        return "TIE"
+    
+    else:
+        return False
 
 def empty_spaces():
-    pass
+    spaces = 9
+    
+    for row in range(3):
+        for column in range(3):
+            if buttons[row][column]['text'] != +" ":
+                spaces -=1
+                
+    if spaces == 0:
+        return False
+    
+    else:
+        return True
 
 def new_game():
-    pass
+    global player
+    
+    player = random.choice(players)
+    label .config(text = player + ' turn', font=("Calibri", 30))
+    
+    for row in range(3):
+        for column in range(3):
+            buttons[row][column].config(text="", bg="#F0F0F0")
+
 
 def center_and_resize(window, width, height):
     # Update tasks so window width/height are accurately recognized before mapping
